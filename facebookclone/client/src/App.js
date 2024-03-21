@@ -1,7 +1,14 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Topbar from "./component/topbar/Topbar";
+
 function App() {
   return (
-      <h1>jay mataji</h1>
-  );  
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Topbar />}></Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

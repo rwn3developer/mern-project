@@ -16,13 +16,19 @@ const Topbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item">
+                            <Link className="nav-link" href="/">Login</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" href="/">Register</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link className="nav-link" href="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" href="/profile">Profile</Link>
+                            <Link className="nav-link" href="/profile">Message</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" href="/settings">Settings</Link>
+                            <Link className="nav-link" href="/settings">Notification</Link>
                         </li>
                     </ul>
                 </div>

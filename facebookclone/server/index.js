@@ -4,6 +4,12 @@ const port = 8000;
 
 const app = express()
 
+//database
+const {connectDB} = require('./config/db')
+
+//database call function 
+connectDB()
+
 app.use(express.json())
 
 const cors = require('cors')

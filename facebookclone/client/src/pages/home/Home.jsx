@@ -2,7 +2,7 @@ import React from 'react'
 import Leftsidebar from '../../component/leftsidebar/Leftsidebar'
 import Topbar from '../../component/topbar/Topbar'
 import Post from '../../component/post/Post'
-import PostForm from '../../component/post/PostForm'
+import AddPost from '../../component/post/AddPost'
 
 const Home = () => {
   return (
@@ -14,7 +14,7 @@ const Home = () => {
             </div>
 
             <div className='col-md-6'>
-                <PostForm/>
+                <AddPost/>
                 <Post/>
             </div>
 

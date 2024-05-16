@@ -21,6 +21,7 @@ app.use(cors())
 app.use(express.urlencoded())
 
 app.use('/posts',require('./routes/postRoute'));
+app.use('/auth',require('./routes/authRoute'));
 
 
 app.listen(port,(err)=>{

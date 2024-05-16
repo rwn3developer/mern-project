@@ -12,7 +12,29 @@ const postschema = mongoose.Schema({
     public_id : {
         type : String,
         required : true
-    }
+    },
+    userId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'user'
+    },
+    likes : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "user"
+        }
+    ],
+    comments : [{
+        comment : {
+            type : String,
+            required : true
+        },
+        userId : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "user"
+        }
+        
+
+    }]
 })
 
 const post = mongoose.model('post',postschema);

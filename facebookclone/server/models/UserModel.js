@@ -30,5 +30,5 @@ const registerschema = mongoose.Schema({
         required : true
     }
 })
-const register = mongoose.model('register',registerschema);
+const register = mongoose.model('user',registerschema);
 module.exports = register

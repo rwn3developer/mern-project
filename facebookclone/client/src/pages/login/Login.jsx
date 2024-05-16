@@ -1,10 +1,16 @@
 import React, { useState } from 'react'
 import Topbar from '../../component/topbar/Topbar'
+import { useAuth } from '../../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
+    const [auth,setAuth] = useAuth()
+    const navigate = useNavigate()
+
+    
 
     const handleSubmit = async(e) => {
         e.preventDefault()
@@ -19,7 +25,20 @@ const Login = () => {
         })
         let res = await all.json()
         if(res.success){
+            setAuth({
+                ...auth,
+                user : res.user,
+                token : res.token
+            })
+            let obj = {
+                user : res.user,
+                token : res.token
+            }
+            localStorage.setItem('auth',JSON.stringify(obj))
             alert(res.message)
+            navigate('/home');
+            setEmail("")
+            setPassword("")
         }else{
             alert(res.message)
         }
@@ -43,7 +62,7 @@ const Login = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Password</label>
-                                        <input type="password" onChange={ (e) => setPassword(e.target.value) } value={password}  className="form-control"/>
+                                        <input type="password" placeholder='Enter Password' onChange={ (e) => setPassword(e.target.value) } value={password}  className="form-control"/>
                                     </div>
                                     <button type="submit" className="btn btn-primary">Submit</button>
                                 </form>

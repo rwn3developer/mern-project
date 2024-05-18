@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const AddPost = () => {
-
+  const navigate = useNavigate()
   const [auth,setAuth] = useAuth()
   const [title,setTitle] = useState("");
   const [image,setImage] = useState("");
@@ -22,7 +25,10 @@ const AddPost = () => {
         });
         let res = await all.json()
         if(res.success){
-          alert(res.message)
+          toast.success(res.message)
+          setTimeout(()=>{
+            navigate('/home')
+          },3000)
         }
     }catch(err){
       console.log(err);
@@ -46,6 +52,7 @@ const AddPost = () => {
           <button type="submit" className="btn btn-primary">Post</button> 
         </form>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

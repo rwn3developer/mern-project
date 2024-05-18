@@ -4,6 +4,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import UserPrivateRoute from "./PrivateRoute/UserPrivateRoute";
+import CreatePost from "./pages/post/CreatePost";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         {/* user route */}
         <Route element={<UserPrivateRoute/>}>
             <Route path="/home" element={<Home />}/>
+            <Route path="/createpost" element={<CreatePost />}/>
         </Route>
           
 

@@ -41,7 +41,7 @@ const Post = () => {
                             <div className="card-footer">
 
                                 <div className="row">
-                                    <h6>Username {p.title}</h6>
+                                    <h6>{p?.userId?.name} {p.title}</h6>
                                 </div>
 
                                 <div className="row">

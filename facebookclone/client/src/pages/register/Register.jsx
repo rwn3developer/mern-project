@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import Topbar from '../../component/topbar/Topbar'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
 
@@ -27,7 +29,7 @@ const Register = () => {
             })
             let res = await all.json();
             if(res.success){
-                alert(res.message)
+                toast.success(res.message)
             }
         }catch(err){
             console.log(err);
@@ -91,6 +93,7 @@ const Register = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer/>
         </>
     )
 }

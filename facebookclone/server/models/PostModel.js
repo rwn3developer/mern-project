@@ -32,9 +32,7 @@ const postschema = mongoose.Schema({
             type : mongoose.Schema.Types.ObjectId,
             ref : "user"
         }
-        
-
-    }]
+    }],
 })
 
 const post = mongoose.model('post',postschema);

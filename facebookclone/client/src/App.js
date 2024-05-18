@@ -12,9 +12,9 @@ function App() {
         <Route path="/" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
 
+        {/* user route */}
         <Route element={<UserPrivateRoute/>}>
             <Route path="/home" element={<Home />}/>
-           
         </Route>
           
 

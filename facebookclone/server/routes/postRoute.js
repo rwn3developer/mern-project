@@ -12,14 +12,17 @@ const upload = multer({ storage: storage }).single('image');
 
 const PostModel = require('../models/PostModel')
 
+const {verifyToken} = require('../config/verifyToken')
 
-routes.post('/addPost',upload,async(req,res)=>{
+
+routes.post('/addPost',verifyToken,upload,async(req,res)=>{
     try{
-        let imageUrl = await cloudinary.uploader.upload(req.file.path)
-        const add = await PostModel.create({
+            let imageUrl = await cloudinary.uploader.upload(req.file.path)
+            const add = await PostModel.create({
             title : req.body.title,
             postimage : imageUrl.secure_url,
-            public_id : imageUrl.public_id
+            public_id : imageUrl.public_id,
+            userId : req.user.user._id
         })
         return res.status(200).send({
             success : true,

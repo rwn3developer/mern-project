@@ -9,7 +9,7 @@ const UserPrivateRoute = () => {
   return (
         // auth?.token && auth?.user?.role==="user" ? <Outlet/> : <Navigate to={'/'}/>
         auth?.token  ? <Outlet/> : <Navigate to={'/'}/>
-  )
+  ) 
 }
 
 export default UserPrivateRoute

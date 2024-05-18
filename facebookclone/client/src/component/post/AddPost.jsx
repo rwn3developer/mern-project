@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const AddPost = () => {
 
+  const [auth,setAuth] = useAuth()
   const [title,setTitle] = useState("");
   const [image,setImage] = useState("");
 
@@ -13,6 +15,9 @@ const AddPost = () => {
             formData.append('image', image);
         let all = await fetch(`http://localhost:8000/posts/addPost`,{
             method : 'POST',
+            headers:{
+              Authorization : `Bearer ${auth?.token}`
+            },
             body : formData
         });
         let res = await all.json()

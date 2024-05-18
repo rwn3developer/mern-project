@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import Topbar from '../../component/topbar/Topbar'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
 
@@ -35,8 +37,11 @@ const Login = () => {
                 token : res.token
             }
             localStorage.setItem('auth',JSON.stringify(obj))
-            alert(res.message)
-            navigate('/home');
+            toast.success(res.message)
+            setTimeout(()=>{
+                navigate('/home');
+            },3000)
+           
             setEmail("")
             setPassword("")
         }else{
@@ -72,6 +77,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer/>
         </>
     )
 }

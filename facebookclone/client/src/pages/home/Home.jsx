@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div className='container-fluid'>
         <Topbar/>
-        <div className="row">
+        <div className="row my-3">
             <div className="col-md-3 my-3">
                 <Leftsidebar/>
             </div>
@@ -18,7 +18,7 @@ const Home = () => {
             </div>
 
             <div className="col-md-3 my-3">
-                <Leftsidebar/>
+                <h4>Follow Unfollow</h4>
             </div>
         </div>
     </div>

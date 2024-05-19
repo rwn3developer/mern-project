@@ -33,6 +33,10 @@ const postschema = mongoose.Schema({
             ref : "user"
         }
     }],
+    dateField: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 const post = mongoose.model('post',postschema);

@@ -54,9 +54,11 @@ const CreatePost = () => {
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group">
+                                    <label htmlFor="exampleInputEmail1" className="form-label">Title</label>
                                     <input type='text' className="form-control" onChange={(e) => setTitle(e.target.value)} value={title} name="content" rows="3" placeholder="What's on your mind?" />
                                 </div>
                                 <div className="form-group mt-3 mb-3">
+                                    <label htmlFor="exampleInputEmail1" className="form-label">File Upload</label>
                                     <input type="file" onChange={(e) => setImage(e.target.files[0])} name='image' className='form-control' />
                                 </div>
                                 <button type="submit" className="btn btn-primary">Post</button>

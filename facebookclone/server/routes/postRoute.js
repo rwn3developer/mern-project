@@ -38,7 +38,8 @@ routes.post('/addPost',verifyToken,upload,async(req,res)=>{
 
 routes.get('/viewPost',async(req,res)=>{
     try{
-       let posts = await PostModel.find({}).populate("userId")
+       let posts = await PostModel.find({}).sort( { _id: -1 } ).populate("userId")
+
         return res.status(200).send({
             success : true,
             message : 'Post successfully fetch',

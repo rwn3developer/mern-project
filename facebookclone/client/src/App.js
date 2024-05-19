@@ -5,6 +5,10 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import UserPrivateRoute from "./PrivateRoute/UserPrivateRoute";
 import CreatePost from "./pages/post/CreatePost";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.js'
+import Profile from "./pages/Userprofile/Profile";
+import Mypost from "./pages/mypost/Mypost";
 
 function App() {
   return (
@@ -17,6 +21,8 @@ function App() {
         <Route element={<UserPrivateRoute/>}>
             <Route path="/home" element={<Home />}/>
             <Route path="/createpost" element={<CreatePost />}/>
+            <Route path="/userprofile" element={< Profile/>}/>
+            <Route path="/mypost" element={< Mypost/>}/>
         </Route>
           
 

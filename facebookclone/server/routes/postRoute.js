@@ -51,5 +51,41 @@ routes.get('/viewPost',async(req,res)=>{
     }
 })
 
+routes.post('/likePost',verifyToken,async(req,res)=>{
+    try{
+        let likepost = await PostModel.findByIdAndUpdate(req.body.postId,{
+            $push : {
+                likes : req.user.user._id
+            }
+        })
+        return res.status(200).send({
+            success : true,
+            message : "Like successfully",
+            result : likepost
+        })
+    }catch(err){
+        console.log(err);
+        return false;
+    }
+})
+
+routes.post('/dislikePost',verifyToken,async(req,res)=>{
+    try{
+        let dislikepost = await PostModel.findByIdAndUpdate(req.body.postId,{
+            $pull : {
+                likes : req.user.user._id
+            }
+        })
+        return res.status(200).send({
+            success : true,
+            message : "Dislike successfully",
+            result : dislikepost
+        })
+    }catch(err){
+        console.log(err);
+        return false;
+    }
+})
+
 
 module.exports = routes;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { AiOutlineLike } from "react-icons/ai";
-import { FaRegCommentAlt } from "react-icons/fa";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from "../../context/AuthContext";
 
 const Post = () => {
@@ -24,6 +24,52 @@ const Post = () => {
         }
     }
 
+    const addLike = async(postId) => {
+        try{
+            let all = await fetch(`http://localhost:8000/posts/likePost`,{
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',
+                    Authorization : `Bearer ${auth?.token}`
+                },
+                body : JSON.stringify({
+                    postId : postId
+                })
+            })
+            let res = await all.json()
+            if(res.success){
+                toast.success(res.message)
+                getPost()
+            }
+        }catch(err){
+            console.log(err);
+            return false;
+        }
+    }
+
+    const addDislike = async(postId) => {
+        try{
+            let all = await fetch(`http://localhost:8000/posts/dislikePost`,{
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',
+                    Authorization : `Bearer ${auth?.token}`
+                },
+                body : JSON.stringify({
+                    postId : postId
+                })
+            })
+            let res = await all.json()
+            if(res.success){
+                toast.success(res.message)
+                getPost()
+            }
+        }catch(err){
+            console.log(err);
+            return false;
+        }
+    }
+
     useEffect(() => {
         getPost()
     }, [])
@@ -33,10 +79,10 @@ const Post = () => {
             {
                 posts.map((p) => {
                     //Date formaTE dd/mm/yy
-                    const d = new Date(p.dateField);
-                    const day = String(d.getDate()).padStart(2, '0');
-                    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-                    const year = d.getFullYear();
+                    const date = new Date(p.dateField);
+                    const day = String(date.getUTCDate()).padStart(2, '0');
+                    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+                    const year = String(date.getUTCFullYear()).slice(2);
         
 
                     return (
@@ -66,10 +112,24 @@ const Post = () => {
                                 <div className="row">
                                     <h6>{p?.userId?.name} {p.title}</h6>
                                     <span>Date :- {day}/{month}/{year}</span>
+                                    <span>Likes :- {p.likes.length}</span>
                                 </div>
 
                                 <div className="p-2 d-flex justify-content-between">
-                                    <button className="btn btn-primary">Like :- 1</button>
+
+                                    {
+                                        p.likes.includes(auth?.user?._id) ? (
+                                            <button onClick={ () => addDislike(p._id) } className="btn btn-danger">Dislike</button>
+                                        ) : (
+                                            <button onClick={ () => addLike(p._id) } className="btn btn-primary">Like</button>
+                                        )
+                                    }
+
+                                   
+
+                                  
+
+                                    
 
                                     <button className="btn btn-success" data-bs-toggle="modal" data-bs-target="#commentModel">Add Comment</button>
 
@@ -161,7 +221,7 @@ const Post = () => {
             </div>
 
 
-
+            <ToastContainer/>
         </>
     );
 };

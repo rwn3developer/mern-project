@@ -88,4 +88,28 @@ routes.post('/dislikePost',verifyToken,async(req,res)=>{
 })
 
 
+//add comment
+routes.post('/addComment',verifyToken,async(req,res)=>{
+    try{
+        let comments = {
+            comment : req.body.comment,
+            userId : req.user.user._id
+        }
+        let addcomment = await PostModel.findByIdAndUpdate(req.body.postId,{
+            $push : {
+                comments : comments
+            }
+        })
+        return res.status(200).send({
+            success : true,
+            message : "Comment Successfully Add",
+            result : addcomment
+        })
+    }catch(err){
+        console.log(err);
+        return false;
+    }
+})
+
+
 module.exports = routes;

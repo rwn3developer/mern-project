@@ -89,7 +89,7 @@ routes.post('/dislikePost',verifyToken,async(req,res)=>{
 
 
 //add comment
-routes.post('/addComment',verifyToken,async(req,res)=>{
+routes.put('/addComment',verifyToken,async(req,res)=>{
     try{
         let comments = {
             comment : req.body.comment,

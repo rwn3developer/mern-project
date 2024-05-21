@@ -7,6 +7,7 @@ const Post = () => {
     const [auth, setAuth] = useAuth()
     const [posts, setPosts] = useState([])
     const [addcomment,setAddComment] = useState("")
+    const [postid,setPostId] = useState("")
 
     const getPost = async () => {
         try {
@@ -77,7 +78,8 @@ const Post = () => {
     }
 
     //add comment
-    const AddComment = async(postid) => {
+
+    const handleAddComment = async() => {
         try{
             let all = await fetch(`http://localhost:8000/posts/addComment`,{
                 method : "PUT",
@@ -85,14 +87,15 @@ const Post = () => {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${auth?.token}`
                 },
-                body : {
+                body : JSON.stringify({
                     postId : postid,
                     comment : addcomment
-                }
+                })
             });
             let res = await all.json()
             if(res.success){
                 toast.success(res.message)
+                setAddComment("")
                 getPost()
             }
         }catch(err){
@@ -152,7 +155,7 @@ const Post = () => {
                                         )
                                     }
 
-                                    <button  className="btn btn-success" data-bs-toggle="modal" data-bs-target="#commentModel">Add Comment</button>
+                                    <button onClick={ () => setPostId(p._id) }  className="btn btn-success" data-bs-toggle="modal" data-bs-target="#commentModel">Add Comment</button>
 
                                     {/* comment model */}
                                     <div className="modal fade" id="commentModel" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -170,7 +173,7 @@ const Post = () => {
 
                                                         </div>
 
-                                                        <button type="button" onClick={ () => AddComment(p._id) } className="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                                                        <button type="button" onClick={ () => handleAddComment(postid) }  className="btn btn-primary" data-bs-dismiss="modal">Submit</button>
                                                     </form>
                                                 </div>
 

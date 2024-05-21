@@ -95,10 +95,9 @@ routes.post('/addComment',verifyToken,async(req,res)=>{
             comment : req.body.comment,
             userId : req.user.user._id
         }
+        console.log(comments);
         let addcomment = await PostModel.findByIdAndUpdate(req.body.postId,{
-            $push : {
-                comments : comments
-            }
+            $push : { comments : comments }
         })
         return res.status(200).send({
             success : true,

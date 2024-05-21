@@ -1,13 +1,13 @@
 const express = require('express');
 
-const port = 8000;
+const port = 8000; 
 
 const app = express()
 
 //database
-const {connectDB} = require('./config/db')
+const {connectDB} = require('./config/db')   
 
-//database call function 
+//database call function  
 connectDB()
 
 app.use(express.json())

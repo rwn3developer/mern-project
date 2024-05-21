@@ -51,6 +51,25 @@ routes.get('/viewPost',async(req,res)=>{
     }
 })
 
+//delete post
+routes.delete('/deletePost',verifyToken,async(req,res)=>{
+    try{
+        let postId = req.query.id;
+        const imageUrl = await PostModel.findById(postId);
+        await cloudinary.uploader.destroy(imageUrl.public_id)
+        let posts = await PostModel.findByIdAndDelete(postId)
+         return res.status(200).send({
+             success : true,
+             message : 'Post successfully delete',
+             posts
+         })
+     }catch(err){
+         console.log(err);
+         return false;
+     }
+})
+
+
 routes.post('/likePost',verifyToken,async(req,res)=>{
     try{
         let likepost = await PostModel.findByIdAndUpdate(req.body.postId,{
@@ -95,7 +114,6 @@ routes.put('/addComment',verifyToken,async(req,res)=>{
             comment : req.body.comment,
             userId : req.user.user._id
         }
-        console.log(comments);
         let addcomment = await PostModel.findByIdAndUpdate(req.body.postId,{
             $push : { comments : comments }
         })
@@ -103,6 +121,23 @@ routes.put('/addComment',verifyToken,async(req,res)=>{
             success : true,
             message : "Comment Successfully Add",
             result : addcomment
+        })
+    }catch(err){
+        console.log(err);
+        return false;
+    }
+})
+
+//postwise like and comment view
+routes.get('/postwiseLikeCommentView',verifyToken,async(req,res)=>{
+    try{
+        let postid = req.query.postid;
+        let record = await PostModel.findById(postid).populate("likes","name , profileimage").populate("comments.userId","name , profileimage");
+        
+        return res.status(200).send({
+            success : true,
+            message : "Record successfully fetch",
+            record
         })
     }catch(err){
         console.log(err);

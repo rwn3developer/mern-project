@@ -6,8 +6,10 @@ import { useAuth } from "../../context/AuthContext";
 const Post = () => {
     const [auth, setAuth] = useAuth()
     const [posts, setPosts] = useState([])
-    const [addcomment,setAddComment] = useState("")
-    const [postid,setPostId] = useState("")
+    const [addcomment, setAddComment] = useState("")
+    const [postid, setPostId] = useState("")
+    const [postwiselike, setPostwiseLike] = useState([])
+    const [postwisecomment, setPostwisecomment] = useState([])
 
     const getPost = async () => {
         try {
@@ -29,6 +31,28 @@ const Post = () => {
     useEffect(() => {
         getPost()
     }, [])
+
+    //post delete
+    const podtDelete = async (id) => {
+        try {
+            let all = await fetch(`http://localhost:8000/posts/deletePost?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth?.token}`
+                },
+            });
+            let res = await all.json()
+            if (res.success) {
+                toast.error(res.message)
+                getPost();
+            }
+
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+    }
 
     //post like
     const addLike = async (postId) => {
@@ -79,28 +103,55 @@ const Post = () => {
 
     //add comment
 
-    const handleAddComment = async() => {
-        try{
-            let all = await fetch(`http://localhost:8000/posts/addComment`,{
-                method : "PUT",
-                headers : {
+    const handleAddComment = async () => {
+        try {
+            let all = await fetch(`http://localhost:8000/posts/addComment`, {
+                method: "PUT",
+                headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${auth?.token}`
                 },
-                body : JSON.stringify({
-                    postId : postid,
-                    comment : addcomment
+                body: JSON.stringify({
+                    postId: postid,
+                    comment: addcomment
                 })
             });
             let res = await all.json()
-            if(res.success){
+            if (res.success) {
                 toast.success(res.message)
                 setAddComment("")
+                setPostId("")
                 getPost()
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
             return false
+        }
+    }
+
+    const postwiseViewLikeComment = async (postid) => {
+        try {
+            try {
+                let all = await fetch(`http://localhost:8000/posts/postwiseLikeCommentView?postid=${postid}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${auth?.token}`
+                    },
+                });
+                let res = await all.json()
+                if (res.success) {
+                    setPostwiseLike(res.record.likes)
+                    setPostwisecomment(res.record.comments)
+                }
+
+            } catch (err) {
+                console.log(err);
+                return false;
+            }
+        } catch (err) {
+            console.log(err);
+            return false;
         }
     }
 
@@ -128,7 +179,7 @@ const Post = () => {
                                     {
                                         p?.userId?._id == auth?.user?._id && (
                                             <>
-                                                <button className="btn btn-danger btn-sm">Delete</button>
+                                                <button onClick={() => podtDelete(p._id)} className="btn btn-danger btn-sm">Delete</button>
                                                 <button className="mx-3 btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#postEditModal">Edit</button>
                                             </>
                                         )
@@ -144,18 +195,19 @@ const Post = () => {
                                     <h6>{p?.userId?.name} {p.title}</h6>
                                     <span>Date :- {day}/{month}/{year}</span>
                                     <span>Likes :- {p.likes.length}</span>
+                                    <span>Comment :- {p.comments.length}</span>
                                 </div>
 
-                                <div className="p-2 d-flex justify-content-between">
+                                <div className="p-2 d-flex justify-content-between mt-2 mb-2">
                                     {
                                         p.likes.includes(auth?.user?._id) ? (
-                                            <button onClick={() => addDislike(p._id)} className="btn btn-danger">Dislike</button>
+                                            <button onClick={() => addDislike(p._id)} className="btn btn-danger btn-sm">Dislike</button>
                                         ) : (
-                                            <button onClick={() => addLike(p._id)} className="btn btn-primary">Like</button>
+                                            <button onClick={() => addLike(p._id)} className="btn btn-primary btn-sm">Like</button>
                                         )
                                     }
 
-                                    <button onClick={ () => setPostId(p._id) }  className="btn btn-success" data-bs-toggle="modal" data-bs-target="#commentModel">Add Comment</button>
+                                    <button onClick={() => setPostId(p._id)} className="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#commentModel">Add Comment</button>
 
                                     {/* comment model */}
                                     <div className="modal fade" id="commentModel" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -169,11 +221,11 @@ const Post = () => {
                                                     <form>
                                                         <div className="mb-3">
                                                             <label htmlFor="exampleInputEmail1" className="form-label">Add Comment</label>
-                                                            <input type="text" onChange={ (e) => setAddComment(e.target.value) } value={addcomment} placeholder="Write Your Comment" className="form-control" />
+                                                            <input type="text" onChange={(e) => setAddComment(e.target.value)} value={addcomment} placeholder="Write Your Comment" className="form-control" />
 
                                                         </div>
 
-                                                        <button type="button" onClick={ () => handleAddComment(postid) }  className="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                                                        <button type="button" onClick={() => handleAddComment(postid)} className="btn btn-primary" data-bs-dismiss="modal">Submit</button>
                                                     </form>
                                                 </div>
 
@@ -181,7 +233,10 @@ const Post = () => {
                                         </div>
                                     </div>
 
-                                    <button className="btn btn-info" data-bs-toggle="modal" data-bs-target="#viewLikecommentModel">View Like & Comment</button>
+                                    <button onClick={() => postwiseViewLikeComment(p._id)} className="btn btn-warning btn-sm shadow" style={{ color: "white" }} data-bs-toggle="modal" data-bs-target="#viewLikecommentModel">View Like & Comment</button>
+
+
+
                                 </div>
                             </div>
 
@@ -189,7 +244,6 @@ const Post = () => {
                     )
                 })
             }
-
 
 
 
@@ -202,21 +256,48 @@ const Post = () => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
                         <div className="modal-body">
-                            <form>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Add Comment</label>
-                                    <input type="text" placeholder="Write Your Comment" className="form-control" />
+                            <div className="d-flex  justify-content-between p-2">
+
+                                <div className="w-50">
+                                    {
+                                        postwiselike.map((like) => {
+                                            return (
+                                                <div className="p-3 border mb-3">
+                                                    <img src={like.profileimage} height="35" style={{ objectFit: "contain" }} />
+                                                    <span className="mx-2">{like.name}</span>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+
+                                <div>
+                                    {
+                                        postwisecomment.map((comment) => {
+                                            return (
+                                                <div>
+                                                    <img src={comment.userId.profileimage} width="35" />
+                                                    <span className="mx-2">{comment.userId.name}</span>
+                                                   <p>{comment.comment}</p>
+                                                </div>
+                                            )
+                                        })
+                                    }
+
+
 
                                 </div>
 
-                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Submit</button>
-                            </form>
 
+
+                            </div>
+                            <hr></hr>
                         </div>
 
                     </div>
                 </div>
             </div>
+
 
             {/* user wise update post model*/}
             <div className="modal fade" id="postEditModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">

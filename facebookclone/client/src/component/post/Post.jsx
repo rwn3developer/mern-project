@@ -219,7 +219,7 @@ const Post = () => {
 
 
                     return (
-                        <div className="card my-3">
+                        <div className="card my-3 mb-5">
                             <div className="card-header d-flex justify-content-between">
                                 <div className="d-flex align-items-center">
                                     <img className="rounded-circle" src={p?.userId?.profileimage} alt="" width="35" />

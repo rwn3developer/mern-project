@@ -86,7 +86,7 @@ routes.get('/editPost', verifyToken, async (req, res) => {
 })
 
 //post update
-routes.put('/updatePost', verifyToken, upload, async (req, res) => {
+routes.put('/updatePost', verifyToken, upload, async (req, res) => { 
     try {
         let postId = req.query.postid;
         let title = req.body.title;

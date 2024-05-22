@@ -14,6 +14,8 @@ const UserModel = require('../models/UserModel')
 
 const jwt = require('jsonwebtoken');
 
+const { verifyToken } = require('../config/verifyToken');
+
 routes.post('/register', upload, async (req, res) => {
     try {
         const { name, email, password, city, phone } = req.body;
@@ -61,6 +63,50 @@ routes.post('/loginUser', async (req, res) => {
             user
         })
     } catch (err) {
+        console.log(err);
+        return false
+    }
+})
+
+//user profile update
+routes.put('/userProfileUpdate',verifyToken,upload,async(req,res)=>{ 
+    try{
+        const userid = req.query.userid
+        const {name,password,city,phone} = req.body;
+        if(req.file){
+            let old = await UserModel.findById(userid);
+            await cloudinary.uploader.destroy(old.public_id)
+            let addimage = await cloudinary.uploader.upload(req.file.path);
+            let updateprofile = await UserModel.findByIdAndUpdate(userid,{
+                name : name,
+                password : password,
+                city : city,
+                phone : phone,
+                profileimage : addimage.secure_url,
+                public_id : addimage.public_id
+            })
+            return res.status(200).send({
+                success : true,
+                message : "Profile successfully changed",
+                updateprofile
+            })
+        }else{
+            let old = await UserModel.findById(userid);
+            let updateprofile = await UserModel.findByIdAndUpdate(userid,{
+                name : name,
+                password : password,
+                city : city,
+                phone : phone,
+                profileimage : old.profileimage,
+                public_id : old.public_id
+            })
+            return res.status(200).send({
+                success : true,
+                message : "Profile successfully changed",
+                updateprofile
+            })
+        }
+    }catch(err){
         console.log(err);
         return false
     }

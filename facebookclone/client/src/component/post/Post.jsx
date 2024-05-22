@@ -6,6 +6,10 @@ import { useAuth } from "../../context/AuthContext";
 const Post = () => {
     const [auth, setAuth] = useAuth()
     const [posts, setPosts] = useState([])
+    const [title,setTitle] = useState("");
+    const [postimage,setPostImage] = useState("")
+    const [posteditid,setPostEditId] = useState("")
+    const [viewpostimage,setViewPostImage] = useState("")
     const [addcomment, setAddComment] = useState("")
     const [postid, setPostId] = useState("")
     const [postwiselike, setPostwiseLike] = useState([])
@@ -20,7 +24,6 @@ const Post = () => {
                 },
             });
             let res = await all.json()
-            console.log(res);
             setPosts(res.posts)
         } catch (err) {
             console.log(err);
@@ -48,6 +51,55 @@ const Post = () => {
                 getPost();
             }
 
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+    }
+
+    //post edit record fetch
+    const postEdit = async(postid) => {
+        try {
+            let all = await fetch(`http://localhost:8000/posts/editPost?postid=${postid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization : `Bearer ${auth?.token}`
+                },
+            });
+            let res = await all.json()
+           
+            setPostEditId(res.posts._id)
+            setTitle(res.posts.title)
+            setViewPostImage(res.posts.postimage)
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+    }
+
+    //post update
+    const handlePostUpdate = async(e) => {  
+        e.preventDefault()
+        try {
+            // console.log(postimage);
+            // console.log(title);
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('image', postimage);
+            let all = await fetch(`http://localhost:8000/posts/updatePost?postid=${posteditid}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization : `Bearer ${auth?.token}`
+                },
+                body : formData
+            });
+            let res = await all.json()
+            if(res.success){
+                toast.success("Post successfully update");
+                setTitle("")
+                getPost()
+            }
         } catch (err) {
             console.log(err);
             return false;
@@ -102,7 +154,6 @@ const Post = () => {
     }
 
     //add comment
-
     const handleAddComment = async () => {
         try {
             let all = await fetch(`http://localhost:8000/posts/addComment`, {
@@ -180,7 +231,7 @@ const Post = () => {
                                         p?.userId?._id == auth?.user?._id && (
                                             <>
                                                 <button onClick={() => podtDelete(p._id)} className="btn btn-danger btn-sm">Delete</button>
-                                                <button className="mx-3 btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#postEditModal">Edit</button>
+                                                <button onClick={ () => postEdit(p._id) } className="mx-3 btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#postEditModal">Edit</button>
                                             </>
                                         )
                                     }
@@ -259,10 +310,12 @@ const Post = () => {
                             <div className="d-flex  justify-content-between p-2">
 
                                 <div className="w-50">
+                                    <p>Like User</p>
                                     {
+                                        
                                         postwiselike.map((like) => {
                                             return (
-                                                <div className="p-3 border mb-3">
+                                                <div className="p-3  mb-3">
                                                     <img src={like.profileimage} height="35" style={{ objectFit: "contain" }} />
                                                     <span className="mx-2">{like.name}</span>
                                                 </div>
@@ -283,13 +336,8 @@ const Post = () => {
                                             )
                                         })
                                     }
-
-
-
                                 </div>
-
-
-
+                                
                             </div>
                             <hr></hr>
                         </div>
@@ -308,20 +356,21 @@ const Post = () => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
                         <div className="modal-body">
-                            <form>
+                            <form onSubmit={handlePostUpdate}>
                                 <div className="mb-3">
                                     <label htmlFor="exampleInputEmail1" className="form-label">Title</label>
-                                    <input type="email" className="form-control" />
+                                    <input type="text" onChange={ (e) => setTitle(e.target.value) } value={title} className="form-control" />
 
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="exampleInputPassword1" className="form-label">File Upload</label>
-                                    <input type="file" className="form-control" />
+                                    <input type="file" onChange={ (e) => setPostImage(e.target.files[0]) } className="form-control" />
+                                    <div className="mt-3">
+                                        <img src={viewpostimage} width="100" alt="" />
+                                    </div>
                                 </div>
-
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" data-bs-dismiss="modal" className="btn btn-primary">Submit</button>
                             </form>
-
                         </div>
                     </div>
                 </div>

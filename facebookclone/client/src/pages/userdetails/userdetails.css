@@ -1,0 +1,12 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+.user-image{
+    width: 200px;
+    height: 200px;
+    background-color: burlywood;
+    border-radius: 50%;
+}

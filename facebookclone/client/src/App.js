@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.js'
 import Profile from "./pages/Userprofile/Profile";
 import Mypost from "./pages/mypost/Mypost";
+import Userdetails from "./pages/userdetails/Userdetails";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/createpost" element={<CreatePost />}/>
             <Route path="/userprofile" element={< Profile/>}/>
             <Route path="/mypost" element={< Mypost/>}/>
+            <Route path="/userdetails/:id" element={<Userdetails/>}/>
         </Route>
           
 

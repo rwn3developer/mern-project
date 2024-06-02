@@ -14,7 +14,7 @@ const PostModel = require('../models/PostModel')
 
 const { verifyToken } = require('../config/verifyToken')
 
-
+//user add post
 routes.post('/addPost', verifyToken, upload, async (req, res) => {
     try {
         let imageUrl = await cloudinary.uploader.upload(req.file.path)
@@ -35,7 +35,7 @@ routes.post('/addPost', verifyToken, upload, async (req, res) => {
     }
 })
 
-
+//user view post
 routes.get('/viewPost', async (req, res) => {
     try {
         let posts = await PostModel.find({}).sort({ _id: -1 }).populate("userId")
@@ -69,7 +69,7 @@ routes.delete('/deletePost', verifyToken, async (req, res) => {
     }
 })
 
-
+//userwise editpost
 routes.get('/editPost', verifyToken, async (req, res) => {
     try {
         let postId = req.query.postid;
@@ -123,7 +123,7 @@ routes.put('/updatePost', verifyToken, upload, async (req, res) => {
     }
 })
 
-
+//user like post
 routes.post('/likePost', verifyToken, async (req, res) => {
     try {
         let likepost = await PostModel.findByIdAndUpdate(req.body.postId, {
@@ -142,6 +142,7 @@ routes.post('/likePost', verifyToken, async (req, res) => {
     }
 })
 
+//user dislike post
 routes.post('/dislikePost', verifyToken, async (req, res) => {
     try {
         let dislikepost = await PostModel.findByIdAndUpdate(req.body.postId, {

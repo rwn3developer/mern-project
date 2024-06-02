@@ -7,47 +7,47 @@ import { useNavigate } from 'react-router-dom'
 
 const Profile = () => {
     const navigate = useNavigate()
-    const [auth,setAuth] = useAuth()
-    const [name,setName] = useState("");
-    const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
-    const [city,setCity] = useState("");
-    const [phone,setPhone] = useState("");
-    const [profilepic,setProfile] = useState("");
-    const [image,setImage] = useState("")
+    const [auth, setAuth] = useAuth()
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [city, setCity] = useState("");
+    const [phone, setPhone] = useState("");
+    const [profilepic, setProfile] = useState("");
+    const [image, setImage] = useState("")
 
-    useEffect(()=>{
+    useEffect(() => {
         setName(auth?.user?.name)
         setEmail(auth?.user?.email)
         setPassword(auth?.user?.password)
         setCity(auth?.user?.city)
         setPhone(auth?.user?.phone)
         setImage(auth?.user.profileimage)
-    },[])
+    }, [])
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
+        try {
             let formdata = new FormData();
-            formdata.append("name",name)
-            formdata.append("password",password)
-            formdata.append("city",city)
-            formdata.append("phone",phone)
-            formdata.append("profilepic",profilepic)
+            formdata.append("name", name)
+            formdata.append("password", password)
+            formdata.append("city", city)
+            formdata.append("phone", phone)
+            formdata.append("profilepic", profilepic)
 
-            let all = await fetch(`http://localhost:8000/auth/userProfileUpdate?userid=${auth?.user._id}`,{
-                method : "PUT",
-                headers : {
-                    Authorization : `Bearer ${auth?.token}`
+            let all = await fetch(`http://localhost:8000/auth/userProfileUpdate?userid=${auth?.user._id}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${auth?.token}`
                 },
-                body : formdata
+                body: formdata
             })
             let res = await all.json()
-            if(res.success){
+            if (res.success) {
                 alert(res.message)
                 navigate('/home');
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
             return false;
         }
@@ -56,12 +56,12 @@ const Profile = () => {
     return (
         <div className='container-fluid'>
             <Topbar />
+            
             <div className="row my-3">
                 <div className="col-md-3 my-3">
                     <Leftsidebar />
                 </div>
-
-                <div className='col-md-6 my-3'>
+                <div className='col-lg-9 my-3'>
                     <form onSubmit={handleSubmit}>
                         <div className='row'>
                             <h4>Change Profile</h4>
@@ -93,17 +93,13 @@ const Profile = () => {
                                     <label className="form-label">Profile Pic</label>
                                     <input type="file" name='profilepic' onChange={(e) => setProfile(e.target.files[0])} className="form-control" />
                                     <div className='mt-3'>
-                                        <img src={image} width="100px"/>
+                                        <img src={image} width="100px" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
-                </div>
-
-                <div className="col-md-3 my-3">
-                    <h4>Follow Unfollow</h4>
                 </div>
             </div>
         </div>

@@ -16,6 +16,7 @@ const jwt = require('jsonwebtoken');
 
 const { verifyToken } = require('../config/verifyToken');
 
+//user register
 routes.post('/register', upload, async (req, res) => {
     try {
         const { name, email, password, city, phone } = req.body;
@@ -40,6 +41,7 @@ routes.post('/register', upload, async (req, res) => {
     }
 })
 
+//user login user
 routes.post('/loginUser', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -109,6 +111,21 @@ routes.put('/userProfileUpdate',verifyToken,upload,async(req,res)=>{
     }catch(err){
         console.log(err);
         return false
+    }
+})
+
+//all user show
+routes.get('/showAllUser',verifyToken,async(req,res)=>{
+    try{
+        const alluser = await UserModel.find({});
+        return res.status(200).send({
+            success : true,
+            message : "all user show",
+            users : alluser
+        })
+    }catch(err){
+        console.log(err);
+        return false;
     }
 })
 

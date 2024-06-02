@@ -2,6 +2,7 @@ import React from 'react'
 import Leftsidebar from '../../component/leftsidebar/Leftsidebar'
 import Topbar from '../../component/topbar/Topbar'
 import Post from '../../component/post/Post'
+import Rightsidebar from '../../component/leftsidebar/Rightsidebar'
 
 
 const Home = () => {
@@ -18,7 +19,7 @@ const Home = () => {
             </div>
 
             <div className="col-md-3 my-3">
-                <h4>Follow Unfollow</h4>
+                <Rightsidebar/>
             </div>
         </div>
     </div>
